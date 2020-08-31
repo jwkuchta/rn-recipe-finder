@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#ccc',
         borderRadius: 10,
-        overflow: 'hidden' // so no child can go beyond the border radius
+        overflow: 'hidden', // so no child can go beyond the border radius
+        marginVertical: 10
     },
     mealHeader: {
         height: '85%', // it will hold the image

@@ -1,15 +1,13 @@
 import React from 'react'
 import { View, Text, StyleSheet , Button} from 'react-native'
 import { MEALS } from '../data/dummy-data'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import HeaderButton from '../components/HeaderButton'
 
 const MealDetailScreen = props => {
 
-    console.log('meal detail screen props', props)
-
     const mealId = props.navigation.getParam('mealId')
-    console.log('mealId', mealId)
     const selectedMeal = MEALS.find(meal => meal.id === mealId)
-    console.log('selected meal', selectedMeal)
 
     return (
         <View style={styles.screen}>
@@ -27,7 +25,15 @@ MealDetailScreen.navigationOptions = (navData) => {
     const mealId = navData.navigation.getParam('mealId')
     const selectedMeal = MEALS.find(meal => meal.id === mealId)
     return {
-        headerTitle: selectedMeal.title
+        headerTitle: selectedMeal.title,
+        // HeaderButtons expects a props which is the component that should be used to render this item
+        headerRight: () => {
+            return (
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item title='fav' iconName='star' onPress={() => console.log('mark as favorite')} />
+                </HeaderButtons>
+            )
+        }
     }
 }
 
