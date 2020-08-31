@@ -9,6 +9,8 @@ import FavoritesScreen from '../screens/FavoritesScreen'
 import colors from '../constants/colors'
 import { AntDesign } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs' // for android
+import { Platform } from 'react-native'
 
 // configure the initial order of screens (the main screens)
 const MealsNavigator = createStackNavigator({
@@ -28,23 +30,32 @@ const MealsNavigator = createStackNavigator({
     }
 })
 
-const MealsFavTabNavigator = createBottomTabNavigator({
+const tabScreenConfig = {
     // what screens will be displayed when you click on a particular tab
     Meals: { 
         screen: MealsNavigator, 
         navigationOptions: {
-            tabBarIcon: (tabinfo) => <Ionicons name='ios-restaurant' size={25} color={tabinfo.tintColor} />
+            tabBarIcon: (tabinfo) => <Ionicons name='ios-restaurant' size={25} color={tabinfo.tintColor} />,
+            tabBarColor: colors.primary // will have effect when shifting is set to true (on android only)
     }}, // we can use the MealsNavigator to be loaded when this tab is clicked!
     Favorites: {
         screen: FavoritesScreen,
         navigationOptions: {
-            tabBarIcon: (tabinfo) => <Ionicons name='ios-star' size={25} color={tabinfo.tintColor} />
+            tabBarIcon: (tabinfo) => <Ionicons name='ios-star' size={25} color={tabinfo.tintColor} />,
+            tabBarColor: colors.accent
         }
     }
-}, {
+}
+
+const MealsFavTabNavigator = 
+Platform.OS === 'android' 
+? createMaterialBottomTabNavigator(tabScreenConfig, {
+    activeColor: 'white',
+    shifting: true
+})
+: createBottomTabNavigator(tabScreenConfig, {
     tabBarOptions: {
         activeTintColor: colors.accent,
-
     }
 })
 
