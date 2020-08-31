@@ -5,33 +5,37 @@ import MealItem from '../components/MealItem'
 
 const CategoryMealScreen = props => {
 
-    const catId = props.navigation.getParam('categoryId')
-    const selectedCat = CATEGORIES.find(cat => cat.id === catId)
-    const displayedMeals = MEALS.filter(meal => meal.categoryIds.indexOf(catId) >= 0)
-
-    const onSelectItem = () => {}
-
     const renderMealItem = itemData => {
         return (
-            <View>
-                <MealItem 
+            <MealItem 
+                title={itemData.item.title}
+                image={itemData.item.imageUrl}
                 duration={itemData.item.duration}
                 complexity={itemData.item.complexity}
                 affordability={itemData.item.affordability}
-                title={itemData.item.title}
-                onSelectMeal={() => {}}
-                item={itemData.item}
-                image={itemData.item.imageUrl}
-                />
-            </View>
+    
+                onSelectMeal={() => {
+                    // we can forward mealId to the MealDetail via params
+                    props.navigation.navigate({
+                        routeName: 'MealDetail', 
+                        params: {
+                            mealId: itemData.item.id
+                        }
+                    })
+                }}
+            />
         )
     }
+
+    const catId = props.navigation.getParam('categoryId')
+    const displayedMeals = MEALS.filter(meal => meal.categoryIds.indexOf(catId) >= 0)
 
     return (
         <View style={styles.screen}>
             {/* we don't need to extract the key because modern RN looks for 'id' */}
             <FlatList 
             data={displayedMeals} 
+            keyExtractor={(item, index) => item.id}
             renderItem={renderMealItem}
             style={{width: '100%'}} 
             />
