@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { CATEGORIES } from '../data/dummy-data'
 import CategoryGridTile from '../components/CategoryGridTile'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import HeaderButton from '../components/HeaderButton'
 
 const CategoriesScreen = props => {
 
@@ -27,8 +29,23 @@ const CategoriesScreen = props => {
     )
 }
 
-CategoriesScreen.navigationOptions = {
-    headerTitle: 'Meal Categories',
+CategoriesScreen.navigationOptions = (navData) => { // we need the navData to toggle the drawer
+    return {
+        headerTitle: 'Meal Categories',
+        headerLeft: () => {
+            return (
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item 
+                    title='Menu' 
+                    iconName='bars' 
+                    onPress={() => navData.navigation.toggleDrawer()}
+
+                    />
+                </HeaderButtons>
+            )
+        }
+} 
+     
     // moved to MealsNavigator for default settings
     // headerStyle: {
     //     backgroundColor: colors.primary
