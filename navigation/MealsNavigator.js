@@ -54,7 +54,8 @@ const tabScreenConfig = {
         screen: MealsNavigator, 
         navigationOptions: {
             tabBarIcon: (tabinfo) => <AntDesign name='find' size={25} color={tabinfo.tintColor} />,
-            tabBarColor: colors.primary // will have effect when shifting is set to true (on android only)
+            tabBarColor: colors.primary 
+            // will have effect when shifting is set to true (on android only)
     }}, // we can use the MealsNavigator to be loaded when this tab is clicked!
     Favorites: {
         screen: FavoritesNavigator,
