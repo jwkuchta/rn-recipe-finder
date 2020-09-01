@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet, Switch } from 'react-native'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import HeaderButton from '../components/HeaderButton'
@@ -20,22 +20,40 @@ const FilterSwitch = props => {
     )
 }
 
-const FiltersScreen = props => {
+const FiltersScreen = ({ navigation }) => {
 
     const [ isGF, setIsGF ] = useState(false)
     const [ isLacFree, setIsLacFree ] = useState(false)
     const [ isVegan, setIsVegan ] = useState(false)
     const [ isVegetarian, setIsVegetarian ] = useState(false)
 
+    // to make sure saveFilters only updates when our state changes, we are using useCallback.
+    // useCallback wraps the function and makes the saveFilters function cached by React and only recreated 
+    // when its dependencies change (kind of like useEffect) there are changes (array on line 40)
+    const saveFilters = useCallback(() => {
+        const appliedFilters = {
+            glutenFree: isGF,
+            lactoseFree: isLacFree,
+            vegan: isVegan,
+            vegetarian: isVegetarian
+        }
+        console.log(appliedFilters)
+    }, [isGF, isLacFree, isVegan, isVegetarian])
+
+    useEffect(() => {
+        navigation.setParams({
+            save: saveFilters
+        })
+    }, [saveFilters])
+
     return (
         <View style={styles.screen}>
             <Text style={styles.title}>Filter By: </Text>
-            <FilterSwitch label='Gluten-Free' value={isGF} onChange={(isGF) => setIsGF(isGF)}/>
-            <FilterSwitch label='Lactose-Free' value={isLacFree} onChange={(isLacFree) => setIsLacFree(isLacFree)}/>
-            <FilterSwitch label='Vegan' value={isVegan} onChange={(isVegan) => setIsVegan(isVegan)}/>
-            <FilterSwitch label='Vegetarian' value={isVegetarian} onChange={(isVegetarian) => setIsVegetarian(isVegetarian)}/>
+            <FilterSwitch label='Gluten-Free' value={isGF} onChange={() => setIsGF(!isGF)}/>
+            <FilterSwitch label='Lactose-Free' value={isLacFree} onChange={() => setIsLacFree(!isLacFree)}/>
+            <FilterSwitch label='Vegan' value={isVegan} onChange={() => setIsVegan(!isVegan)}/>
+            <FilterSwitch label='Vegetarian' value={isVegetarian} onChange={() => setIsVegetarian(!isVegetarian)}/>
         </View>
-        
     )
 }
 
@@ -48,6 +66,18 @@ FiltersScreen.navigationOptions = (navData) => {
                 title='Menu'
                 iconName='bars'
                 onPress={() => navData.navigation.toggleDrawer()}
+                />
+            </HeaderButtons>
+        ),
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item 
+                title='Save'
+                iconName='save'
+                // this needs to be executed immediately, like so:
+                onPress={() => navData.navigation.getParam('save')()}
+                // or bound to the onPress and executed when it is triggered by the event:
+                // onPress={navData.navigation.getParam('save')}
                 />
             </HeaderButtons>
         )
@@ -75,3 +105,5 @@ const styles = StyleSheet.create({
 })
 
 export default FiltersScreen
+
+// getParams() causes the component to rebuild because its props (navigation) change
