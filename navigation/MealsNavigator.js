@@ -10,7 +10,7 @@ import FavoritesScreen from '../screens/FavoritesScreen'
 import FiltersScreen from '../screens/FiltersScreen'
 import colors from '../constants/colors'
 import { AntDesign } from '@expo/vector-icons'; 
-import { Ionicons } from '@expo/vector-icons'
+// import { Ionicons } from '@expo/vector-icons'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs' // for android
 import { Platform } from 'react-native'
 
@@ -44,6 +44,8 @@ const FavoritesNavigator = createStackNavigator({
 
 const FiltersNavigator = createStackNavigator({
     Filters: FiltersScreen
+}, {
+    defaultNavigationOptions: defaultStackNavOptions
 })
 
 const tabScreenConfig = {
@@ -77,9 +79,19 @@ Platform.OS === 'android'
 
 // this wil be our main navigator as the drawer navigator is higher in the hierarchy
 const MainNavigator = createDrawerNavigator({
-    MealsFavs: MealsFavTabNavigator,
+    MealsFavs: {
+        screen: MealsFavTabNavigator,
+        navigationOptions: {
+            drawerLabel: 'Meals'
+        }
+    },
     Filters: FiltersNavigator
 
+}, {
+    contentOptions: {
+        activeColor: colors.accent,
+        activeTintColor: colors.accent
+    }
 })
 
 // MealsFavTabNavigator now became our root navigator so the below export needs to change

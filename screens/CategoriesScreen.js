@@ -39,18 +39,11 @@ CategoriesScreen.navigationOptions = (navData) => { // we need the navData to to
                     title='Menu' 
                     iconName='bars' 
                     onPress={() => navData.navigation.toggleDrawer()}
-
                     />
                 </HeaderButtons>
             )
         }
-} 
-     
-    // moved to MealsNavigator for default settings
-    // headerStyle: {
-    //     backgroundColor: colors.primary
-    // },
-    // headerTintColor: 'white'
+    } 
 }
 
 const styles = StyleSheet.create({
