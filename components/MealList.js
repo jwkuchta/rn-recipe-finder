@@ -1,6 +1,6 @@
 // MealList is now its own component as it will be used by Meals by category and in the Favorites screen as well
 import React from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList } from 'react-native'
 import MealItem from '../components/MealItem'
 
 const MealList = props => {
@@ -19,7 +19,8 @@ const MealList = props => {
                     props.navigation.navigate({
                         routeName: 'MealDetail', 
                         params: {
-                            mealId: itemData.item.id
+                            mealId: itemData.item.id,
+                            mealTitle: itemData.item.title
                         }
                     })
                 }}

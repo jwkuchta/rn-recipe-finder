@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, StyleSheet , Button, ScrollView, Image } from 'react-native'
-import { MEALS } from '../data/dummy-data'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import HeaderButton from '../components/HeaderButton'
 import DefaultText from '../components/DefaultText'
+import { useSelector } from 'react-redux'
 
 const ListItem = props => {
     return (
@@ -15,8 +15,15 @@ const ListItem = props => {
 
 const MealDetailScreen = props => {
 
+    const availableMeals = useSelector(state => state.meals.meals)
     const mealId = props.navigation.getParam('mealId')
-    const selectedMeal = MEALS.find(meal => meal.id === mealId)
+    const selectedMeal = availableMeals.find(meal => meal.id === mealId)
+
+    // we could do this but our param would not be passed til after the component is loaded 
+    // and the headerTitle would be delayed. It is better to forward it from MealList so it is available earlier
+    // useEffect(() => {
+    //     props.navigation.setParams({mealTitle: selectedMeal.title})
+    // }, [selectedMeal])
 
     return (
         <ScrollView>
@@ -46,10 +53,11 @@ const MealDetailScreen = props => {
 
 // so we can put the recipe title in the header
 MealDetailScreen.navigationOptions = (navData) => {
-    const mealId = navData.navigation.getParam('mealId')
-    const selectedMeal = MEALS.find(meal => meal.id === mealId)
+    // we can't use useSelector here
+    const selectedMealTitle = props.navigation.getParam('mealTitle')
+
     return {
-        headerTitle: selectedMeal.title,
+        headerTitle: selectedMealTitle,
         // HeaderButtons expects a props which is the component that should be used to render this item
         headerRight: () => {
             return (
