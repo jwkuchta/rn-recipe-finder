@@ -4,6 +4,8 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import HeaderButton from '../components/HeaderButton'
 // you need to manually manage state for the Switch
 import colors from '../constants/colors'
+import { useDispatch } from 'react-redux'
+import { setFilters } from '../store/actions/meals'
 
 const FilterSwitch = props => {
     return (
@@ -27,6 +29,8 @@ const FiltersScreen = ({ navigation }) => {
     const [ isVegan, setIsVegan ] = useState(false)
     const [ isVegetarian, setIsVegetarian ] = useState(false)
 
+    const dispatch = useDispatch()
+
     // to make sure saveFilters only updates when our state changes, we are using useCallback.
     // useCallback wraps the function and makes the saveFilters function cached by React and only recreated 
     // when its dependencies change (kind of like useEffect) there are changes (array on line 40)
@@ -37,8 +41,8 @@ const FiltersScreen = ({ navigation }) => {
             vegan: isVegan,
             vegetarian: isVegetarian
         }
-        console.log(appliedFilters)
-    }, [isGF, isLacFree, isVegan, isVegetarian])
+        dispatch(setFilters(appliedFilters))
+    }, [isGF, isLacFree, isVegan, isVegetarian, dispatch])
 
     useEffect(() => {
         navigation.setParams({
