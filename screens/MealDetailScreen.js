@@ -18,7 +18,12 @@ const MealDetailScreen = props => {
 
     const availableMeals = useSelector(state => state.meals.meals)
     const mealId = props.navigation.getParam('mealId')
+    const favoriteMeals = useSelector(state => state.meals.favoriteMeals)
     const selectedMeal = availableMeals.find(meal => meal.id === mealId)
+    // const currentMealIsFavorite = useSelector(state => state.meals.favoriteMeals.some(meal => meal.id === mealId))
+    const currentMealIsFavorite = favoriteMeals.includes(selectedMeal)
+    console.log(currentMealIsFavorite)
+    
 
     const dispatch = useDispatch()
 
@@ -29,6 +34,10 @@ const MealDetailScreen = props => {
     useEffect(() => {
         props.navigation.setParams({toggleFav: toggleFavHandler})
     }, [toggleFavHandler])
+
+    useEffect(() => {
+      props.navigation.setParams({isFav: currentMealIsFavorite})
+    }, [currentMealIsFavorite])
 
     // we could do this but our param would not be passed til after the component is loaded 
     // and the headerTitle would be delayed. It is better to forward it from MealList so it is available earlier
@@ -60,6 +69,7 @@ MealDetailScreen.navigationOptions = (navData) => {
     // we can't use useSelector here
     const selectedMealTitle = navData.navigation.getParam('mealTitle')
     const toggleFav = navData.navigation.getParam('toggleFav')
+    const isFav = navData.navigation.getParam('isFav')
 
     return {
         headerTitle: selectedMealTitle,
@@ -69,7 +79,8 @@ MealDetailScreen.navigationOptions = (navData) => {
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
                     <Item 
                     title='fav' 
-                    iconName='star' 
+                    // iconName='star' 
+                    iconName={isFav ? 'star' : 'skype'}
                     onPress={toggleFav} 
                     />
                 </HeaderButtons>
